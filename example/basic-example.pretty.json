@@ -1,0 +1,145 @@
+[
+  {
+    "id": "4717ad68.05d344",
+    "type": "tab",
+    "label": "Flow 1",
+    "disabled": false,
+    "info": ""
+  },
+  {
+    "id": "ed329be2.1633c",
+    "type": "inject",
+    "z": "4717ad68.05d344",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "{\"loops\":[]}",
+    "payloadType": "json",
+    "x": 120,
+    "y": 120,
+    "wires": [
+      [
+        "dc2da5ff.a8b0e8"
+      ]
+    ]
+  },
+  {
+    "id": "ba1a7a2f.50d64",
+    "type": "comment",
+    "z": "4717ad68.05d344",
+    "name": "loop if inc < 3 == true",
+    "info": "# Iterate if the termination condition\n# is TRUE",
+    "x": 380,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "a2920354.897d98",
+    "type": "debug",
+    "z": "4717ad68.05d344",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload.loops",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 650,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "bd6554d3.75acb",
+    "type": "debug",
+    "z": "4717ad68.05d344",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "inc",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 600,
+    "y": 120,
+    "wires": []
+  },
+  {
+    "id": "8bf4fc25.166748",
+    "type": "function",
+    "z": "4717ad68.05d344",
+    "name": "msg.payload.loops.push(inc)",
+    "func": "msg.payload.loops.push(msg.inc);\nreturn msg;",
+    "outputs": 1,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "x": 400,
+    "y": 240,
+    "wires": [
+      [
+        "dc2da5ff.a8b0e8"
+      ]
+    ]
+  },
+  {
+    "id": "c3d9c89f.f85478",
+    "type": "delay",
+    "z": "4717ad68.05d344",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "1",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "x": 600,
+    "y": 160,
+    "wires": [
+      [
+        "8bf4fc25.166748"
+      ]
+    ]
+  },
+  {
+    "id": "dc2da5ff.a8b0e8",
+    "type": "iterate-loop",
+    "z": "4717ad68.05d344",
+    "name": "",
+    "i": "inc",
+    "startCount": 0,
+    "endCondition": "3",
+    "operatorEndCondition": "lt",
+    "increment": 1,
+    "varType": "msg",
+    "startCountType": "num",
+    "endConditionType": "num",
+    "incrementType": "num",
+    "x": 380,
+    "y": 140,
+    "wires": [
+      [
+        "a2920354.897d98"
+      ],
+      [
+        "bd6554d3.75acb",
+        "c3d9c89f.f85478"
+      ]
+    ]
+  }
+]

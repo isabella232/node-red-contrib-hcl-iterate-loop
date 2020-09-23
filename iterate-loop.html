@@ -1,0 +1,166 @@
+<script type="text/x-red" data-template-name="iterate-loop">
+    <div class="form-row">
+        <label for="node-input-name" title="Name displayed in the node" style="width:30%;"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" style="width:68%;" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-i" title="Variable name for the counter" style="width:30%;"><i class="fa fa-map-marker"></i> Variable</label>
+        <input type="text" id="node-input-i" style="width:68%;" placeholder="define a variable name">
+        <input type="hidden" id="node-input-varType">
+    </div>
+    <div class="form-row">
+        <label for="node-input-startCount" title="Initial value for the counter variable" style="width:30%;"><i class="fa fa-play"></i> Start with</label>
+        <input type="text" id="node-input-startCount" style="width:68%;" placeholder="start variable with">
+        <input type="hidden" id="node-input-startCountType">
+    </div>
+    <div class="form-row">
+        <label for="node-input-endCondition" title="end condition value" style="width:30%;"><i class="fa fa-stop"></i> End when</label>
+        <select id="operatorEndCondition-select" style="width:10%;">
+            <option value="eq">==</option>
+            <option value="lt"><</option>
+            <option value="lte"><=</option>
+            <option value="gt">></option>
+            <option value="gte">>=</option>
+        </select>
+        <input type="hidden" id="node-input-operatorEndCondition">
+        <input type="text" id="node-input-endCondition" placeholder="End when condition value" style="width:58%;">
+        <input type="hidden" id="node-input-endConditionType">
+    </div>
+    <div class="form-row">
+        <label for="node-input-increment" title="increment or decrement the counter variable" style="width:30%;">
+            <i class="fa fa-sort"></i> Inc/Dec</label>
+        </label>
+        <input type="text" id="node-input-increment" style="width:68%;" placeholder="increment or decrement value">
+        <input type="hidden" id="node-input-incrementType">
+    </div>
+    <div class="form-tips">
+        <span>
+            <i class="fa fa-lightbulb-o"></i> Tip: Depending of the logic of the made condition,
+            positive values for increment and negative values for decrement the variable
+        </span>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="iterate-loop">
+    <p></p>
+    <h3>Inputs</h3>
+    <dl>
+        <dt>Variable</dt>
+        <dd>Define the name of the variable counter to use.
+          Can be set a msg property, or a context variable(flow, global)
+
+        <dt>Start with</dt>
+        <dd>Initial value of counter variable, can be set a number, msg property, or a context variable(flow, global)</dd>
+        <dt>End when</dt>
+        <dd>If comparing this value to the counter variable results in true, flow is sent to the lower output port. Set to number, msg property, flow context or global context.</dd>
+        <dt>Increment/Decrement</dt>
+        <dd>
+          <i class="fa fa-lightbulb-o"></i>
+          Tip: Depending of the logic of the made condition,
+          positive values for increment and negative values for decrement the variable.
+          Can be set a number, msg property or a context variable(flow, global)</dd>
+    </dl>
+    <h3>Outputs</h3>
+    <dl>
+      <p>Depending the result of the end condition</p>
+        <dt>
+          True --> continue
+        </dt>
+        <dd>if the condition is TRUE the output will be sent to the port with label continue, and will continue the next iteration</dd>
+        <dt>
+          False ---> exit
+        </dt>
+        <dd>if the condition is FALSE the output will be sent to the port with the label exit, finishing the loop</dd>
+    </dl>
+    <div class="form-tips">
+        <span> <i class="fa fa-exclamation-triangle"></i> Be careful, incorrect manipulation of the variable defined in a context can produce this node enter in an infinite loop  </h2>
+        </span>
+    </div>
+</script>
+
+<script type="text/javascript">
+
+    RED.nodes.registerType("iterate-loop", {
+      // align: "right",
+      category: "function",
+      color: "#FFAAAA",
+      defaults: {
+        name: { value: "" },
+        i: { value: "", required: true },
+        startCount: { value: 0, required: true },
+        endCondition: { value: "", required: true },
+        operatorEndCondition: { value: "eq", required: true },
+        increment: { value: 1, required: true },
+        varType: { value: "msg" },
+        startCountType: { value: "num" },
+        endConditionType: { value: "num" },
+        incrementType: { value: "num" }
+      },
+      inputs: 1,
+      outputs: 2,
+      icon: "font-awesome/fa-refresh",
+      inputLabels: "input function",
+      outputLabels: ["exit", "continue"],
+      paletteLabel: "iterate-loop",
+      label: function() {
+          let operator;
+          let conditionName;
+          switch (this.operatorEndCondition) {
+              case "eq":
+                  operator = "==";
+                  break;
+              case "lt":
+                  operator = "<";
+                  break;
+              case "lte":
+                  operator = "<=";
+                  break;
+              case "gt":
+                  operator = ">";
+                  break;
+              case "gte":
+                  operator = ">=";
+                  break;
+              default:
+                  RED.notify(this._("Invalid operator"));
+          }
+          if (this.i && this.endCondition) {
+              let endConditionType = this.endConditionType === "num" ? "" : this.endConditionType + ".";
+              conditionName = this.varType + "." + this.i + operator + endConditionType + this.endCondition;
+          }
+          return this.name || conditionName ||"iterate-loop";
+      },
+      oneditprepare: function() {
+
+        $("#operatorEndCondition-select").on("change", function() {
+          let valueOperator = $(this).val();
+            $("#node-input-operatorEndCondition").val(valueOperator);
+        });
+
+        if ($("#node-input-i").val() === "") {
+            $("#node-input-i").val(this.id.replace(/[^a-zA-Z0-9]/g, ""));
+        }
+        $("#operatorEndCondition-select").val(this.operatorEndCondition);
+        $("#node-input-i").typedInput({
+            types: ["msg", "flow", "global"],
+            typeField: $('#node-input-varType')
+        });
+
+        $('#node-input-startCount').typedInput({
+            types: ["num", "msg", "flow", "global"],
+            typeField: $("#node-input-startCountType")
+        });
+
+        $('#node-input-endCondition').typedInput({
+            types: ["num", "msg", "flow", "global"],
+            typeField: $("#node-input-endConditionType")
+        });
+
+        $('#node-input-increment').typedInput({
+            types: ["num", "msg", "flow", "global"],
+            typeField: $("#node-input-incrementType")
+        });
+      }
+    });
+
+</script>

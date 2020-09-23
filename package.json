@@ -1,0 +1,16 @@
+{
+    "name" : "node-red-contrib-iterate-loop",
+    "description" : "This Node-RED node allows you to build a loop",
+    "version": "0.0.1",
+  	"main": "iterate-loop.js",
+    "license": "Apache-2.0",
+  	"keywords": [
+  		"node-red","loop","iterate","cycle"
+  	],
+   "author": "Sergio De Dios",
+    "node-red" : {
+        "nodes": {
+            "iterate-loop": "iterate-loop.js"
+        }
+    }
+}
