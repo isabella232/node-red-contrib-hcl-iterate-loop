@@ -1,5 +1,5 @@
 {
-    "name" : "node-red-contrib-iterate-loop",
+    "name" : "node-red-contrib-hcl-iterate-loop",
     "description" : "This Node-RED node allows you to build a loop",
     "version": "0.0.1",
   	"main": "iterate-loop.js",

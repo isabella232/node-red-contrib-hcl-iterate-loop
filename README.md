@@ -1,4 +1,4 @@
-# node-red-contrib-iterate-loop
+# node-red-contrib-hcl-iterate-loop
 Node-RED node to build loops and interact with others nodes in a flow.
 Basically working like a `for loop`.
 
