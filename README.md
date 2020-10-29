@@ -18,12 +18,15 @@ When the condition changes to `FALSE` the loop will terminate an the output will
 With an example can be more straightforward to understand how this node works, the flow is available in the example folder of this repo.
 
 ![iterate-loop resting](./images/node0.png)
+
 node0.png - *node in resting mode*
 
 ![iterate-loop looping](./images/node1.png)
+
 node1.png - *looping status*
 
 ![iterate-loop terminated](./images/node2.png)
+
 node2.png - *terminated loop status*
 
 ![iterate-loop output](./images/node-output.png)
