@@ -7,6 +7,11 @@
   	"keywords": [
   		"node-red","loop","iterate","cycle"
   	],
+   "homepage": "https://github.com/HCL-TECH-SOFTWARE/node-red-contrib-hcl-iterate-loop#readme",
+   "repository": {
+        "type": "git",
+        "url": "git+https://github.com/HCL-TECH-SOFTWARE/node-red-contrib-hcl-iterate-loop"
+   },
    "author": "Sergio De Dios",
     "node-red" : {
         "nodes": {
