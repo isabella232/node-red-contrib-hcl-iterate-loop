@@ -1,5 +1,3 @@
 .git/
-example/
-images/
 .gitignore
 package-lock.json
